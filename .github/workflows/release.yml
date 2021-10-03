@@ -29,10 +29,12 @@ jobs:
             VERSION=nightly
           fi
           TAGS="${DOCKER_IMAGE}:${VERSION}"
+          RELEASE="${DOCKER_IMAGE}:${VERSION}"
           if [[ $VERSION =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
             TAGS="$TAGS,${DOCKER_IMAGE}:latest"
           fi
           echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=release::${RELEASE}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -69,4 +71,4 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Github Action for curl
-        run: curl -X POST -i -H "Authorization: Bearer ${{ secrets.JIRA_SERVICE_TOKEN }}" -d '{"requestType": "new_signature", "image": "${{ steps.prep.outputs.tags }}", "projectId": "${{ secrets.JIRA_PROJECT }}", "pipeline": "1"}' https://wsqtoqt4v1.execute-api.us-east-1.amazonaws.com/dev/jira-service
+        run: curl -X POST -i -H "Authorization: Bearer ${{ secrets.JIRA_SERVICE_TOKEN }}" -d '{"requestType": "new_signature", "image": "${{ steps.prep.outputs.release }}", "projectId": "${{ secrets.JIRA_PROJECT }}", "pipeline": "1"}' https://wsqtoqt4v1.execute-api.us-east-1.amazonaws.com/dev/jira-service
