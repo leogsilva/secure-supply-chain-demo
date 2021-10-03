@@ -69,4 +69,5 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Github Action for curl
-        run: curl -X POST -i -H "Authorization: Bearer ${{ secrets.JIRA_SERVICE_TOKEN }}" -d '{"requestType": "new_signature", "image": "${{ steps.prep.outputs.tags }}", "projectId": "${{ secrets.JIRA_PROJECT }}", "pipeline": "1"}' https://wsqtoqt4v1.execute-api.us-east-1.amazonaws.com/dev/jira-service
+        run: |
+          curl -X POST -i -H "Authorization: Bearer ${{ secrets.JIRA_SERVICE_TOKEN }}" -d '{"requestType": "new_signature", "image": "${{ steps.prep.outputs.tags }}", "projectId": "${{ secrets.JIRA_PROJECT }}", "pipeline": "1"}' https://wsqtoqt4v1.execute-api.us-east-1.amazonaws.com/dev/jira-service
