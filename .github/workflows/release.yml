@@ -70,6 +70,10 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
+      - name: Run cosign
+        uses: sigstore/cosign-installer@main
+        run: COSIGN_EXPERIMENTAL=1 cosign sign -a git_sha=$GITHUB_SHA ${{ steps.prep.outputs.release }}
+
       - name: Github Action for curl
         run: |
           curl -X POST -i -H "Authorization: Bearer ${{ secrets.JIRA_SERVICE_TOKEN }}" -d '{"requestType": "new_signature", "image": "${{ steps.prep.outputs.release }}", "projectId": "${{ secrets.JIRA_PROJECT }}", "pipeline": "1"}' https://wsqtoqt4v1.execute-api.us-east-1.amazonaws.com/dev/jira-service
