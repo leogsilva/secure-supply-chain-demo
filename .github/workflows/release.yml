@@ -11,6 +11,13 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+
+    # https://docs.github.com/en/actions/reference/authentication-in-a-workflow
+    permissions:
+      id-token: write  # undocumented OIDC support.
+      packages: write
+      contents: read
+      
     steps:
       # GitHub Actions do not automatically checkout your projects. If you need the code
       # you need to check it out.
