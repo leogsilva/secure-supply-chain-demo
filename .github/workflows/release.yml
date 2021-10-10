@@ -87,11 +87,16 @@ jobs:
       - name: Use SBOM
         uses: anchore/sbom-action/download-syft@v0.2.0
       - name: Generate SBOM
-        run: |
-          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
-          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o spdx-json > image-sbom.spdx.json
+        uses: anchore/sbom-action@v0.2.0
+        with:
+          image: ${{ steps.prep.outputs.release }}
+          artifact-name: sbom.spdx
+        # run: |
+        #   syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
       - name: Upload SBOM to assets
         uses: anchore/sbom-action/publish-sbom@v0.2.0
+        with:
+          sbom-artifact-match: ".*\\.spdx$"
       - name: Cosign installer
         uses: sigstore/cosign-installer@main
       - name: Run cosign
@@ -99,7 +104,7 @@ jobs:
 
       - name: Attest SBOM
         run: |
-          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign attest -key github.key -predicate sbom.json ${{ steps.prep.outputs.release }}
+          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign attest -key github.key -predicate sbom.spdx ${{ steps.prep.outputs.release }}
 
       - name: Github Action for curl
         run: |
