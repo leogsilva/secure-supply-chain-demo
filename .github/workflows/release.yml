@@ -97,7 +97,7 @@ jobs:
 
       - name: Attest SBOM
         run: |
-          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign attest -key github.key -predicate sbom.json -r ${{ steps.prep.outputs.release }}
+          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign attest -key github.key -predicate sbom.json ${{ steps.prep.outputs.release }}
 
       - name: Github Action for curl
         run: |
