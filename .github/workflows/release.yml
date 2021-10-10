@@ -78,7 +78,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: install cosign private key
-        run: 'echo "$COSIGN_KEY" > $COSIGN_KEY_LOCATION'
+        run: 'echo "$COSIGN_KEY" > github.key'
         shell: bash
         env:
           COSIGN_KEY: ${{secrets.COSIGN_KEY}}
@@ -90,7 +90,7 @@ jobs:
 
       - name: sign the image with key
         run: |
-          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign sign -key $COSIGN_KEY_LOCATION -r ${{ steps.prep.outputs.release }}
+          echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign sign -key github.key -r ${{ steps.prep.outputs.release }}
 
       - name: Github Action for curl
         run: |
