@@ -88,7 +88,11 @@ jobs:
         uses: anchore/sbom-action/download-syft@v0.2.0
       - name: Generate SBOM
         run: |
-          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
+          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json && \
+          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o spdx-json > sbom.spdx
+      - uses: anchore/sbom-action/publish-sbom@v0
+        with:
+          sbom-artifact-match: ".*\\.spdx$"          
 
       - name: Cosign installer
         uses: sigstore/cosign-installer@main
