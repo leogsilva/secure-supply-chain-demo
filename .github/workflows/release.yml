@@ -86,6 +86,7 @@ jobs:
 
       - name: Use SBOM
         uses: anchore/sbom-action/download-syft@v0.2.0
+      - name: Generate SBOM
         run: |
           syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
       # - name: Upload SBOM to assets
