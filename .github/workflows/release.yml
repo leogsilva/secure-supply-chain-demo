@@ -89,7 +89,7 @@ jobs:
       - name: Generate SBOM
         run: |
           syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
-          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o spdx-json > sbom.spdx
+          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o spdx-json > image-sbom.spdx.json
       - name: Upload SBOM to assets
         uses: anchore/sbom-action/publish-sbom@v0.2.0
       - name: Cosign installer
