@@ -92,7 +92,7 @@ jobs:
           syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o spdx-json > sbom.spdx
       - uses: anchore/sbom-action/publish-sbom@v0
         with:
-          sbom-artifact-match: ".*\\.spdx$"          
+          sbom-artifact-match: "sbom.spdx"          
 
       - name: Cosign installer
         uses: sigstore/cosign-installer@main
