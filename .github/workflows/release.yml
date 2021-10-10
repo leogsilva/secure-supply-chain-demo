@@ -83,14 +83,21 @@ jobs:
         env:
           COSIGN_KEY: ${{secrets.COSIGN_KEY}}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+
+      - name: Use SBOM
+        uses: anchore/sbom-action/download-syft@v0.2.0
+      - name: Generate SBOM
+        run: |
+          syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
+
       - name: Cosign installer
         uses: sigstore/cosign-installer@main
       - name: Run cosign
         run: echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign sign -a git_sha=$GITHUB_SHA -key github.key -r ${{ steps.prep.outputs.release }}
 
-      # - name: sign the image with key
-      #   run: |
-      #     echo -n "${{secrets.COSIGN_PASSWORD}}" | cosign sign -key github.key -r ${{ steps.prep.outputs.release }}
+      - name: Attest SBOM
+        run: |
+          cosign attest -predicate sbom.json -key github.key -r ${{ steps.prep.outputs.release }}
 
       - name: Github Action for curl
         run: |
