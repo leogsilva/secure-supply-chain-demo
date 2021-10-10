@@ -97,7 +97,7 @@ jobs:
         uses: anchore/sbom-action/publish-sbom@v0.2.0
         with:
           sbom-artifact-match: ".*\\.spdx$"
-          github_token: {{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN }}
       - name: Cosign installer
         uses: sigstore/cosign-installer@main
       - name: Run cosign
