@@ -85,7 +85,7 @@ jobs:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
       - name: Use SBOM
-        uses: anchore/sbom-action/download-syft@v0.3.0
+        uses: anchore/sbom-action/download-syft@v0.13.1
       - name: Generate SBOM
         run: |
           syft packages ${{ steps.prep.outputs.release }} --scope all-layers -o json > sbom.json
